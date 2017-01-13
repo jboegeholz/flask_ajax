@@ -1,3 +1,5 @@
+from time import sleep
+
 from flask import Flask, jsonify
 from flask import render_template
 from flask import request
@@ -13,12 +15,14 @@ def item_list():
 @app.route('/_items')
 def items():
     filter = request.args.get('filter', "", type=str)
-    items = ["apple", "banana", "lemon"]
+    items = ["aaa", "bbb", "ccc"]
 
     filtered_items = []
     for item in items:
         if filter in item:
             filtered_items.append(item)
+
+    sleep(1)
     return jsonify(items=filtered_items)
 
 if __name__ == '__main__':
