@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<body>
+<table id="items">
+    <thead>
+        <tr>
+            <th>Fruit</th>
+        </tr>
+        <tr>
+            <td>
+                <input id="filter"/>
+            </td>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script type="text/javascript">
+$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+$(document).ready(function(){
+    get_table_data();
+    var request, timeout;
+    var processing = false;
+
+    $( "#filter" ).keyup(function(){
+        timeout = setTimeout(get_table_data, 300);
+    });
+    function get_table_data(){
+        if(!processing){
+            processing = true;
+            request = $.getJSON($SCRIPT_ROOT + '/_items', {
+                filter: $("#filter").val()
+                }, function(data){update_table.call(undefined, data)}
+            )
+        }
+    }
+    function update_table (data) {
+        var $tbody = $("#items").find("tbody");
+        $tbody.empty();
+        var rows = data.fruits.length;
+        if (rows > 0) {
+            for (var i = 0; i < rows; i++) {
+                var row = "<tr>";
+                row += "<td>" + data.fruits[i] + "</td>";
+                row += "</tr>";
+                $tbody.append(row);
+            }
+        }
+        processing = false;
+    }
+});
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<html>
+<head>
+</head>
+<body>
+<form method="POST">
+<table>
+    <thead>
+        <tr>
+            <th>Fruit</th>
+        </tr>
+        <tr>
+            <td>
+                <input type=search name="filter"/>
+                <button>Search</button>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fruit in fruits %}
+            <tr>
+                <td>{{ fruit }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</form>
+</body>
+</html>
