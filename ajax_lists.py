@@ -24,18 +24,21 @@ def static_item_list():
 def item_list_with_filter():
     fruits = ["Apple", "Banana", "Lemon"]
 
-    if "filter" in request.form:
-        fruit_filter_value = request.form["filter"]
-    else:
-        fruit_filter_value = ""
+    if request.method == "POST":
+        if "filter" in request.form:
+            fruit_filter_value = request.form["filter"]
+        else:
+            fruit_filter_value = ""
 
-    filtered_items = []
-    for fruit in fruits:
-        if fruit_filter_value.lower() in fruit.lower():
-            filtered_items.append(fruit)
+        filtered_items = []
+        for fruit in fruits:
+            if fruit_filter_value.lower() in fruit.lower():
+                filtered_items.append(fruit)
+
+        fruits = filtered_items
 
     return render_template("item_list_with_filter.html",
-                           fruits=filtered_items)
+                           fruits=fruits)
 
 
 @app.route('/dynamic_item_list')
@@ -45,12 +48,12 @@ def dynamic_item_list():
 
 @app.route('/_items')
 def items():
-    fruit_filter_value = request.args.get('filter', "", type=str)
+    filter_value = request.args.get('filter', "", type=str)
     fruits = ["Apple", "Banana", "Lemon"]
 
     filtered_items = []
     for fruit in fruits:
-        if fruit_filter_value.lower() in fruit.lower():
+        if filter_value.lower() in fruit.lower():
             filtered_items.append(fruit)
 
     sleep(1)  # to simulate latency on the server side

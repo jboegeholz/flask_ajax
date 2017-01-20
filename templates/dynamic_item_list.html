@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </head>
 <body>
@@ -17,10 +19,9 @@
     <tbody></tbody>
 </table>
 <script type="text/javascript">
-$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $(document).ready(function(){
     get_table_data();
-    var request, timeout;
+    var timeout = null;
     var processing = false;
 
     $( "#filter" ).keyup(function(){
@@ -29,9 +30,9 @@ $(document).ready(function(){
     function get_table_data(){
         if(!processing){
             processing = true;
-            request = $.getJSON($SCRIPT_ROOT + '/_items', {
+            $.getJSON('/_items', {
                 filter: $("#filter").val()
-                }, function(data){update_table.call(undefined, data)}
+                }, function(data){update_table.call(null, data)}
             )
         }
     }
@@ -39,13 +40,9 @@ $(document).ready(function(){
         var $tbody = $("#items").find("tbody");
         $tbody.empty();
         var rows = data.fruits.length;
-        if (rows > 0) {
-            for (var i = 0; i < rows; i++) {
-                var row = "<tr>";
-                row += "<td>" + data.fruits[i] + "</td>";
-                row += "</tr>";
-                $tbody.append(row);
-            }
+        for (var i = 0; i < rows; i++) {
+            var row = "<tr><td>" + data.fruits[i] + "</td></tr>";
+            $tbody.append(row);
         }
         processing = false;
     }
