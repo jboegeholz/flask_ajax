@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Suite</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        (function () {
+            var results;
+            this.assert = function assert(value, desc) {
+                var li = document.createElement("li");
+                li.className = value ? "pass" : "fail";
+                li.appendChild(document.createTextNode(desc));
+                results.appendChild(li);
+                if (!value) {
+
+                    li.parentNode.parentNode.className = "fail";
+                }
+                return li;
+            };
+            this.test = function test(name, fn) {
+                results = document.getElementById("results");
+                results = assert(true, name).appendChild(
+                        document.createElement("ul"));
+                var t0 = performance.now();
+                fn();
+                var t1 = performance.now();
+                results = assert(true, "Test took " + (t1 - t0) + " milliseconds.").appendChild(
+                        document.createElement("ul"));
+            };
+        })();
+        window.onload = function () {
+            test("unoptimized", function () {
+                for(var i = 0; i < 1000000; i++){
+                    $("#items tbody");
+                }
+                assert(true, "Test finished");
+            });
+            test("optimized", function () {
+                for(var i = 0; i < 1000000; i++){
+                    $("#items").find("tbody");
+                }
+                assert(true, "Test finished");
+            });
+        };
+    </script>
+    <style>
+        #results li.pass {
+            color: green;
+        }
+
+        #results li.fail {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tbody id="items"></tbody>
+</table>
+<ul id="results"></ul>
+</body>
+</html>
